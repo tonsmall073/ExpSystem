@@ -34,6 +34,10 @@ class BookService {
       const res = await this.getBooks(
         modelReq.StartLimit,
         modelReq.LengthLimit,
+        modelReq.SearchValue,
+        modelReq.ColumnName,
+        modelReq.OrderDir,
+
       );
       if (res instanceof TypeError) {
         modelRes.MessageDesc = `Method name getBooks error message : ${res.message}`;
@@ -41,7 +45,7 @@ class BookService {
         return modelRes;
       }
 
-      const fullRows = await this.getFullRowBook();
+      const fullRows = await this.getFullRowBook(modelReq.SearchValue);
 
       if (fullRows instanceof TypeError) {
         modelRes.MessageDesc = `Method name getFullRowBook error message : ${fullRows.message}`;
@@ -130,10 +134,37 @@ class BookService {
     }
   }
 
-  async getBooks(valStart, valLimit) {
+  async getBooks(
+    valStart,
+    valLimit,
+    valSearch = "",
+    valColumn = "",
+    valOrderBy = "",
+  ) {
     try {
-      const res = await this._context.collection("Books").find()
-        .sort({ _id: 1 })
+
+      let mapColumnSearch = [];
+      const regExpSearch = new RegExp(`.*${valSearch}.*`);
+      mapColumnSearch.push({ "_id": regExpSearch });
+      mapColumnSearch.push({ "title": regExpSearch });
+      mapColumnSearch.push({ "description": regExpSearch });
+      mapColumnSearch.push({ "image": regExpSearch });
+      mapColumnSearch.push({ "price": parseFloat(valSearch) });
+      mapColumnSearch.push({ "created_at": regExpSearch });
+      mapColumnSearch.push({ "updated_at": regExpSearch });
+
+      let columnSort = {};
+      if (valColumn !== "" && valOrderBy !== "") {
+        if (valOrderBy === 'ASC' || valOrderBy === 'asc') {
+          columnSort[valColumn] = 1;
+        } else {
+          columnSort[valColumn] = -1;
+        }
+      }
+
+      const res = await this._context.collection("Books")
+        .find({ $or: mapColumnSearch })
+        .sort(columnSort)
         .skip(parseInt(valStart) > 0 ? parseInt(valStart) : parseInt(0))
         .limit(parseInt(valLimit))
         .toArray();
@@ -143,9 +174,20 @@ class BookService {
     }
   }
 
-  async getFullRowBook() {
+  async getFullRowBook(valSearch = "") {
     try {
-      const res = await this._context.collection("Books").find()
+      let mapColumnSearch = [];
+      const regExpSearch = new RegExp(`.*${valSearch}.*`);
+      mapColumnSearch.push({ "_id": regExpSearch });
+      mapColumnSearch.push({ "title": regExpSearch });
+      mapColumnSearch.push({ "description": regExpSearch });
+      mapColumnSearch.push({ "image": regExpSearch });
+      mapColumnSearch.push({ "price": parseFloat(valSearch) });
+      mapColumnSearch.push({ "created_at": regExpSearch });
+      mapColumnSearch.push({ "updated_at": regExpSearch });
+
+      const res = await this._context.collection("Books")
+        .find({ $or: mapColumnSearch })
         .limit(parseInt(0))
         .toArray();
       return res.length;
@@ -158,7 +200,7 @@ class BookService {
     try {
       for (let datas of params) {
         const row = await modelRes.PushDatasList();
-        modelRes.Datas[row].Id = datas._id
+        modelRes.Datas[row].Id = datas._id;
         modelRes.Datas[row].Title = datas.title;
         modelRes.Datas[row].Description = datas.description;
         modelRes.Datas[row].Image = datas.image;

@@ -15,7 +15,7 @@ class Book {
   constructor(ser, path, con) {
     this._server = ser;
     this._path = path;
-    this._context = con
+    this._context = con;
   }
 
   async Controller() {
@@ -61,6 +61,11 @@ class Book {
 
           modelReq.LengthLimit = parseInt(req.body.length);
           if (isNaN(modelReq.LengthLimit)) throw new Error('Request param name length to NaN want number only');
+          modelReq.OrderColumn = parseInt(req.body["order[0][column]"]);
+          if (isNaN(modelReq.OrderColumn)) throw new Error('Request param order[0][column] length to NaN want number only');
+          modelReq.OrderDir = req.body["order[0][dir]"];
+          modelReq.ColumnName = req.body[`columns[${modelReq.OrderColumn}][name]`];
+          modelReq.SearchValue = req.body["search[value]"];
 
           const modelRes = new GetBooksResponseModel();
           const service = new BookService(this._context);

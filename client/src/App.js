@@ -77,47 +77,46 @@ class App extends React.Component {
             title: 'Id',
             data: 'Id',
             name: '_id',
-            orderable: false
+            orderable: true
           }, {
             title: 'Title',
             data: 'Title',
             name: 'title',
-            orderable: false
+            orderable: true
           }, {
             title: 'Description',
             data: 'Description',
             name: 'description',
-            orderable: false
+            orderable: true
           }, {
             title: 'Price',
             data: 'Price',
             name: 'price',
-            orderable: false
+            orderable: true
           }, {
             title: 'Image',
             data: 'Image',
             name: 'image',
-            orderable: false
+            orderable: true
           }, {
             title: 'CreatedAt',
             data: 'CreatedAt',
             name: 'created_at',
-            orderable: false
+            orderable: true
           }, {
             title: 'UpdatedAt',
             data: 'UpdatedAt',
             name: 'updated_at',
-            orderable: false
+            orderable: true
           }, {
             title: 'Edit/Del',
             data: 'De',
             name: '_id',
-            orderable: false
+            orderable: true
           }
           //เวลาไม่พอที่จะทำ
-        ], "searching": false
-        , "scrollX": true
-
+        ], "searching": true,
+        "scrollX": true
       }
     );
   }

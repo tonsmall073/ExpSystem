@@ -30,9 +30,9 @@ class GetBooksResponseModel {
   Status;
 
   async PushDatasList() {
-    var objList = new getBooksDatasListResponse();
+    const objList = new getBooksDatasListResponse();
     this.Datas.push(objList);
-    var posi = parseInt(this.Datas.length) - parseInt(1);
+    const posi = parseInt(this.Datas.length) - parseInt(1);
     return posi;
   }
 }

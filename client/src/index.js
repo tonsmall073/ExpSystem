@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import "datatables.net-dt/js/dataTables.dataTables"
+import "datatables.net-dt/js/dataTables.dataTables";
 import "datatables.net-dt/css/jquery.dataTables.css";
 import App from './App';
 import reportWebVitals from './reportWebVitals';

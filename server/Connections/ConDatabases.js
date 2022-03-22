@@ -1,7 +1,7 @@
 
 class ConDatabases {
   mongo = require('mongodb').MongoClient;
-  url = "mongodb://localhost:27017/";
+  url = "mongodb://tonsmall073:wisaruth@mongo:27017/";
   async ExpSystem() {
     try {
       const db = await this.mongo.connect(this.url);
